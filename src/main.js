@@ -17,6 +17,12 @@ const map = new mapboxgl.Map( {
 	projection: "mercator",
 } )
 
+const state = {
+	longitude: null,
+	latitude: null,
+	id: null,
+}
+
 map.on( "load", async () => {
 
 	const response = await fetch( "/data.geojson" )
@@ -49,23 +55,32 @@ map.on( "load", async () => {
 
 	button.onclick = () => {
 
-		navigator.geolocation.getCurrentPosition( position => {
+		state.id = navigator.geolocation.watchPosition( position => {
 
 			const { longitude, latitude } = position.coords
 
-			const geoJSONPoint = {
-				type: "Feature",
-				geometry: {
-					type: "Point",
-					coordinates: [ longitude, latitude ],
-				},
+			if ( state.longitude !== longitude || state.latitude !== latitude ) {
+
+				const geoJSONPoint = {
+					type: "Feature",
+					geometry: {
+						type: "Point",
+						coordinates: [ longitude, latitude ],
+					},
+				}
+
+				map.getSource( "me" ).setData( geoJSONPoint )
 			}
+			else {
 
-			map.getSource( "me" ).setData( geoJSONPoint )
-
+				navigator.geolocation.clearWatch( state.id )
+			}
 		}, error => {
 
 			console.log( error )
+		}, {
+			enableHighAccuracy: true,
+			timeout: 10_000,
 		} )
 	}
 } )
