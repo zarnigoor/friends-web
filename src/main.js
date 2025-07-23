@@ -21,6 +21,14 @@ const state = {
 	longitude: null,
 	latitude: null,
 	id: null,
+	tracking: false,
+}
+
+const locationInfo = {
+	longitude: document.getElementById('longitude'),
+	latitude: document.getElementById('latitude'),
+	speed: document.getElementById('speed'),
+	container: document.getElementById('location-info'),
 }
 
 map.on( "load", async () => {
@@ -52,11 +60,17 @@ map.on( "load", async () => {
 
 	button.onclick = () => {
 
-		state.id = navigator.geolocation.watchPosition( position => {
+		if (!state.tracking) {
+			
+			state.tracking = true
+			locationInfo.container.style.display = 'block'
+			
+			state.id = navigator.geolocation.watchPosition( position => {
 
-			const { longitude, latitude } = position.coords
+				const { longitude, latitude, speed } = position.coords
 
-			if ( state.longitude !== longitude || state.latitude !== latitude ) {
+				state.longitude = longitude
+				state.latitude = latitude
 
 				const geoJSONPoint = {
 					type: "Feature",
@@ -67,17 +81,27 @@ map.on( "load", async () => {
 				}
 
 				map.getSource( "me" ).setData( geoJSONPoint )
-			}
-			else {
+				
+				locationInfo.longitude.textContent = `Lon: ${longitude.toFixed(6)}`
+				locationInfo.latitude.textContent = `Lat: ${latitude.toFixed(6)}`
+				
+				const speedKmh = speed !== null && speed !== undefined ? (speed * 3.6).toFixed(1) : '0'
+				locationInfo.speed.textContent = `Speed: ${speedKmh} km/h`
 
-				navigator.geolocation.clearWatch( state.id )
-			}
-		}, error => {
+			}, error => {
 
-			console.log( error )
-		}, {
-			enableHighAccuracy: true,
-			timeout: 10_000,
-		} )
+				console.log( error )
+				state.tracking = false
+				locationInfo.container.style.display = 'none'
+			}, {
+				enableHighAccuracy: true,
+				timeout: 10_000,
+			} )
+		} else {
+			
+			navigator.geolocation.clearWatch( state.id )
+			state.tracking = false
+			locationInfo.container.style.display = 'none'
+		}
 	}
 } )

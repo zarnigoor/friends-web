@@ -41,11 +41,37 @@
 			button:hover {
 				background: black;
 			}
+			#location-info {
+				position: absolute;
+				top: 1rem;
+				right: 1rem;
+				z-index: 99;
+				background: rgba(0, 0, 0, 0.85);
+				color: white;
+				padding: 1rem;
+				border-radius: 8px;
+				font-family: 'Courier New', monospace;
+				font-size: 0.9rem;
+				line-height: 1.4;
+				min-width: 200px;
+				backdrop-filter: blur(10px);
+			}
+			#location-info div {
+				margin-bottom: 0.5rem;
+			}
+			#location-info div:last-child {
+				margin-bottom: 0;
+			}
 		</style>
 	</head>
 	<body>
 		<div id="map"></div>
 		<button>📍</button>
+		<div id="location-info" style="display: none;">
+			<div id="longitude">Lon: ---</div>
+			<div id="latitude">Lat: ---</div>
+			<div id="speed">Speed: ---</div>
+		</div>
 		<script type="module" src="/src/main.js"></script>
 	</body>
 </html>
