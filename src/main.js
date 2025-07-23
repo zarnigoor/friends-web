@@ -25,10 +25,7 @@ const state = {
 
 map.on( "load", async () => {
 
-	const response = await fetch( "/data.geojson" )
-	const geoJSON = await response.json()
-
-	map.addSource( "me", { type: "geojson", data: geoJSON } )
+	map.addSource( "me", { type: "geojson", data: null } )
 	map.addLayer( {
 		id: "me",
 		source: "me",
