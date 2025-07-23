@@ -3,6 +3,8 @@ import mapboxgl from "mapbox-gl"
 
 mapboxgl.accessToken = "pk.eyJ1IjoibmFqaW1vdiIsImEiOiJjbWRmazhzdG0wZHVzMmlzOGdrNHFreWV6In0.ENVcoFkxKIqNeCEax2JoFg"
 
+const button = document.querySelector( "button" )
+
 const map = new mapboxgl.Map( {
 	container: "map",
 	attributionControl: false,
@@ -42,4 +44,28 @@ map.on( "load", async () => {
 			"circle-opacity": 0.75,
 		}
 	} )
+
+	//
+
+	button.onclick = () => {
+
+		navigator.geolocation.getCurrentPosition( position => {
+
+			const { longitude, latitude } = position.coords
+
+			const geoJSONPoint = {
+				type: "Feature",
+				geometry: {
+					type: "Point",
+					coordinates: [ longitude, latitude ],
+				},
+			}
+
+			map.getSource( "me" ).setData( geoJSONPoint )
+
+		}, error => {
+
+			console.log( error )
+		} )
+	}
 } )
