@@ -8,12 +8,26 @@ const map = new mapboxgl.Map( {
 	attributionControl: false,
 	logoPosition: "bottom-right",
 	zoom: 9,
-	center: [ 69.2753, 41.3126 ]
+	center: [ 69.2753, 41.3126 ],
+	hash: true,
 } )
 
 map.on( "load", async () => {
 
-	const geoJSON = await ( await fetch( "/data.geojson" ) ).json()
+	const response = await fetch( "/data.geojson" )
+	const geoJSON = await response.json()
 
 	map.addSource( "me", { type: "geojson", data: geoJSON } )
+	map.addLayer( {
+		id: "me",
+		source: "me",
+		type: "circle",
+		paint: {
+			"circle-radius": 12,
+			"circle-color": "orange",
+			"circle-stroke-color": "#ffffff",
+			"circle-stroke-width": 4,
+			"circle-opacity": 0.75,
+		}
+	} )
 } )
