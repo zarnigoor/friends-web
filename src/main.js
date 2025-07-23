@@ -10,6 +10,9 @@ const map = new mapboxgl.Map( {
 	zoom: 9,
 	center: [ 69.2753, 41.3126 ],
 	hash: true,
+	minZoom: 5,
+	maxZoom: 18,
+	projection: "mercator",
 } )
 
 map.on( "load", async () => {
@@ -23,7 +26,16 @@ map.on( "load", async () => {
 		source: "me",
 		type: "circle",
 		paint: {
-			"circle-radius": 12,
+			"circle-radius": [
+				"interpolate",
+				[ "linear" ],
+				[ "zoom" ],
+				5, 16,
+				8, 14,
+				11, 12,
+				13, 10,
+				18, 8,
+			],
 			"circle-color": "orange",
 			"circle-stroke-color": "#ffffff",
 			"circle-stroke-width": 4,
