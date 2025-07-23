@@ -82,6 +82,13 @@ map.on( "load", async () => {
 
 				map.getSource( "me" ).setData( geoJSONPoint )
 				
+				map.flyTo({
+					center: [longitude, latitude],
+					zoom: 15,
+					speed: 1.5,
+					curve: 1.2,
+				})
+				
 				locationInfo.longitude.textContent = `Lon: ${longitude.toFixed(6)}`
 				locationInfo.latitude.textContent = `Lat: ${latitude.toFixed(6)}`
 				
