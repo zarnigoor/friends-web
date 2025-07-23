@@ -11,7 +11,9 @@ const map = new mapboxgl.Map( {
 	center: [ 69.2753, 41.3126 ]
 } )
 
-map.on( "load", () => {
+map.on( "load", async () => {
 
-	console.info( "Map loaded succesfully!" )
+	const geoJSON = await ( await fetch( "/data.geojson" ) ).json()
+
+	map.addSource( "me", { type: "geojson", data: geoJSON } )
 } )

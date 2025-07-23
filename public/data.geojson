@@ -1,0 +1,17 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"properties": {},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [
+					69.25130830237288,
+					41.31588619533801
+				]
+			}
+		}
+	],
+	"generator": "maplify.io"
+}
