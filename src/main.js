@@ -32,19 +32,6 @@ map.on( "load", async () => {
 		console.log( err )
 	}
 
-	// try {
-
-	// 	console.log(  )
-	// }
-	// catch( error ) {
-
-	// 	avatar = "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png"
-
-	// 	console.log( "err", error )
-	// }
-
-	console.log( avatar )
-
 	const server = io( "http://localhost:3000" )
 
 	server.on( "new_user", user => addNewUser( user, map ) )
