@@ -41,12 +41,6 @@ map.on( "load", async () => {
 
 	navigator.geolocation.getCurrentPosition( ( { coords } ) => {
 
-		console.log( {
-			username: username,
-			avatar: avatar,
-			coordinates: [ coords.longitude, coords.latitude ],
-		} )
-
 		server.emit( "new_user", {
 			username: username,
 			avatar: avatar,
