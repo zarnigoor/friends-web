@@ -1,4 +1,5 @@
 import "mapbox-gl/dist/mapbox-gl.css"
+import "./main.css"
 import mapboxgl from "mapbox-gl"
 
 mapboxgl.accessToken = "pk.eyJ1IjoibmFqaW1vdiIsImEiOiJjbWRmazhzdG0wZHVzMmlzOGdrNHFreWV6In0.ENVcoFkxKIqNeCEax2JoFg"
@@ -32,6 +33,25 @@ const locationInfo = {
 }
 
 map.on( "load", async () => {
+
+	const popup = new mapboxgl.Popup( { offset: 100 } ).setHTML( `
+		<div class="user-info">
+			<h1>Muhammadrahim</h1>
+			<ul>
+				<li>Firadvs</li>
+				<li>Asror</li>
+			</ul>
+		</div>
+	` )
+
+	console.log( popup )
+
+	const marker = new mapboxgl.Marker()
+	marker.setLngLat( [ 69.24850253531139, 41.316625628696045 ] )
+	marker.setPopup( popup )
+	marker.addTo( map )
+
+	return
 
 	map.addSource( "me", { type: "geojson", data: null } )
 	map.addSource( "me-hover", { type: "geojson", data: null } )
