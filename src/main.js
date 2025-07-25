@@ -19,6 +19,8 @@ const map = new mapboxgl.Map( {
 
 map.on( "load", async () => {
 
+	console.clear()
+
 	const username = prompt( "Type username:" )
 	let avatar = prompt( "Type image (avatar/profile) address:" )
 
