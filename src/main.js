@@ -49,19 +49,16 @@ map.on( "load", async () => {
 
 	const server = io( "http://localhost:3000" )
 
+	server.on( "new_user", user => addNewUser( user, map ) )
+
 	map.on( "click", () => {
 
-		addNewUser( {
-			type: "Feature",
-			properties: {
-				username: "Chubrik",
-				avatar: "https://www.diamondpet.com/wp-content/uploads/2023/07/brown-chihuahua-standing-in-grass-071723.jpg",
-			},
-			geometry: {
-				type: "Point",
-				coordinates: [ 69.257, 41.31552884597011 ]
-			}
-		}, map )
+		server.emit( "new_user", {
+			username: "Chubrik",
+			avatar: "https://www.diamondpet.com/wp-content/uploads/2023/07/brown-chihuahua-standing-in-grass-071723.jpg",
+			coordinates: [ 69.257, 41.31552884597011 ],
+		} )
+
 	} )
 
 	for ( const user of geojson.features ) {
