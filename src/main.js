@@ -19,18 +19,20 @@ const map = new mapboxgl.Map( {
 
 map.on( "load", async () => {
 
+	const username = prompt( "Type username:" )
+	const avatar = prompt( "Type image (avatar/profile) address:" )
+
+	console.log( username )
+	console.log( avatar )
+
 	const server = io( "http://localhost:3000" )
 
 	server.on( "new_user", user => addNewUser( user, map ) )
 
-	map.on( "click", () => {
-
-		server.emit( "new_user", {
-			username: "Chubrik",
-			avatar: "https://www.diamondpet.com/wp-content/uploads/2023/07/brown-chihuahua-standing-in-grass-071723.jpg",
-			coordinates: [ 69.257, 41.31552884597011 ],
-		} )
-
+	server.emit( "new_user", {
+		username: username,
+		avatar: avatar,
+		coordinates: [ 69.257, 41.31552884597011 ],
 	} )
 } )
 
