@@ -136,7 +136,7 @@ map.on( "load", async () => {
         13, 10,
         18, 8,
       ],
-      "circle-color": "orange",
+      "circle-color": "darkslategrey",
       "circle-stroke-color": "#ffffff",
       "circle-stroke-width": 4,
       "circle-opacity": 0.75,
@@ -166,6 +166,7 @@ map.on( "load", async () => {
   // Hover effects for circle
   map.on("mouseenter", "me", () => {
     map.getCanvas().style.cursor = "pointer"
+    map.setPaintProperty("me", "circle-color", "lightslategrey")
     map.setPaintProperty("me", "circle-radius", [
       "interpolate",
       ["linear"],
@@ -180,6 +181,7 @@ map.on( "load", async () => {
 
   map.on("mouseleave", "me", () => {
     map.getCanvas().style.cursor = ""
+    map.setPaintProperty("me", "circle-color", "darkslategrey")
     map.setPaintProperty("me", "circle-radius", [
       "interpolate",
       ["linear"],
