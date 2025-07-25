@@ -29,10 +29,13 @@ map.on( "load", async () => {
 
 	server.on( "new_user", user => addNewUser( user, map ) )
 
-	server.emit( "new_user", {
-		username: username,
-		avatar: avatar,
-		coordinates: [ 69.257, 41.31552884597011 ],
+	navigator.geolocation.getCurrentPosition( ( { coords } ) => {
+
+		server.emit( "new_user", {
+			username: username,
+			avatar: avatar,
+			coordinates: [ coords.longitude, coords.latitude ],
+		} )
 	} )
 } )
 
