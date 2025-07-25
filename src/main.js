@@ -46,19 +46,39 @@ const map = new mapboxgl.Map( {
 
 map.on( "load", async () => {
 
+	map.on( "click", () => {
+
+		addNewUser( {
+			type: "Feature",
+			properties: {
+				username: "Chubrik",
+				avatar: "https://www.diamondpet.com/wp-content/uploads/2023/07/brown-chihuahua-standing-in-grass-071723.jpg",
+			},
+			geometry: {
+				type: "Point",
+				coordinates: [ 69.257, 41.31552884597011 ]
+			}
+		}, map )
+	} )
+
 	for ( const user of geojson.features ) {
 
-		const el = document.createElement( "div" )
-		el.className = "user"
-		el.style.backgroundImage = `url(${ user.properties.avatar })`
-
-		el.onclick = () => {
-
-			console.log( user.properties.username )
-		}
-
-		const marker = new mapboxgl.Marker( el )
-		marker.setLngLat( user.geometry.coordinates )
-		marker.addTo( map )
+		addNewUser( user, map )
 	}
 } )
+
+function addNewUser( geoJSONFeature, map ) {
+
+	const el = document.createElement( "div" )
+	el.className = "user"
+	el.style.backgroundImage = `url(${ geoJSONFeature.properties.avatar })`
+
+	el.onclick = () => {
+
+		console.log( geoJSONFeature.properties.username )
+	}
+
+	const marker = new mapboxgl.Marker( el )
+	marker.setLngLat( geoJSONFeature.geometry.coordinates )
+	marker.addTo( map )
+}
