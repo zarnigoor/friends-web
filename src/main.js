@@ -33,7 +33,43 @@ const locationInfo = {
 
 map.on( "load", async () => {
 
+	// map.addSource( "mydatasource", { type: "geojson", data: {
+	// 	type: "FeatureCollection",
+	// 	features: [],
+	// } } )
+	// map.addLayer( {
+	// 	id: "polygons",
+	// 	source: "mydatasource",
+	// 	type: "fill",
+	// 	filter: [ "==", [ "geometry-type" ], "Polygon" ],
+	// 	paint: {
+	// 		"fill-color": "#ffa500",
+	// 		"fill-opacity": 0.5,
+	// 	}
+	// } )
+	// map.addLayer( {
+	// 	id: "lines",
+	// 	source: "mydatasource",
+	// 	type: "line",
+	// 	filter: [ "==", [ "geometry-type" ], "LineString" ],
+	// 	paint: {
+	// 		"line-color": "#0000ff",
+	// 		"line-width": 5,
+	// 	},
+	// } )
+	// map.addLayer( {
+	// 	id: "polygon-outline",
+	// 	source: "mydatasource",
+	// 	type: "line",
+	// 	filter: [ "==", [ "geometry-type" ], "Polygon" ],
+	// 	paint: {
+	// 		"line-color": "#000000",
+	// 		"line-width": 3,
+	// 	},
+	// } )
+
 	map.addSource( "me", { type: "geojson", data: null } )
+	map.addSource( "me-hover", { type: "geojson", data: null } )
 	map.addLayer( {
 		id: "me",
 		source: "me",
@@ -55,6 +91,36 @@ map.on( "load", async () => {
 			"circle-opacity": 0.75,
 		}
 	} )
+	map.addLayer( {
+		id: "me-hover",
+		source: "me-hover",
+		type: "circle",
+		paint: {
+			"circle-radius": 16,
+			"circle-color": "navy",
+			"circle-stroke-color": "white",
+			"circle-stroke-width": 4,
+			"circle-opacity": 0.75,
+		}
+	} )
+
+	map.on( "mousemove", "me", e => {
+
+		if ( e.features.length > 0 ) {
+
+			const geoJSONFeature = e.features[ 0 ]
+
+			map.getSource( "me-hover" ).setData( geoJSONFeature )
+		}
+	} )
+
+	map.on( "mouseleave", "me", () => {
+
+		map.getSource( "me-hover" ).setData( {
+			type: "FeatureCollection",
+			features: [],
+		} )
+	} )
 
 	//
 
@@ -73,7 +139,11 @@ map.on( "load", async () => {
 				state.latitude = latitude
 
 				const geoJSONPoint = {
+					id: "abc",
 					type: "Feature",
+					properties: {
+						id: "abc",
+					},
 					geometry: {
 						type: "Point",
 						coordinates: [ longitude, latitude ],
