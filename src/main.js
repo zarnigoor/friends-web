@@ -24,10 +24,7 @@ map.on( "load", async () => {
 
 	try {
 
-		const url = new URL( avatar )
-
-		await fetch( url.href )
-
+		new URL( avatar )
 	}
 	catch( err ) {
 
