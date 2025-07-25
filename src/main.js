@@ -20,9 +20,32 @@ const map = new mapboxgl.Map( {
 map.on( "load", async () => {
 
 	const username = prompt( "Type username:" )
-	const avatar = prompt( "Type image (avatar/profile) address:" )
+	let avatar = prompt( "Type image (avatar/profile) address:" )
 
-	console.log( username )
+	try {
+
+		const url = new URL( avatar )
+
+		await fetch( url.href )
+
+	}
+	catch( err ) {
+
+		avatar = "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png"
+		console.log( err )
+	}
+
+	// try {
+
+	// 	console.log(  )
+	// }
+	// catch( error ) {
+
+	// 	avatar = "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png"
+
+	// 	console.log( "err", error )
+	// }
+
 	console.log( avatar )
 
 	const server = io( "http://localhost:3000" )
@@ -30,6 +53,12 @@ map.on( "load", async () => {
 	server.on( "new_user", user => addNewUser( user, map ) )
 
 	navigator.geolocation.getCurrentPosition( ( { coords } ) => {
+
+		console.log( {
+			username: username,
+			avatar: avatar,
+			coordinates: [ coords.longitude, coords.latitude ],
+		} )
 
 		server.emit( "new_user", {
 			username: username,
@@ -47,7 +76,7 @@ function addNewUser( geoJSONFeature, map ) {
 
 	el.onclick = () => {
 
-		console.log( geoJSONFeature.properties.username )
+		alert( geoJSONFeature.properties.username )
 	}
 
 	const marker = new mapboxgl.Marker( el )
