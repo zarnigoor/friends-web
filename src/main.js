@@ -158,7 +158,7 @@ map.on( "load", async () => {
     type: "line",
     filter: ["==", ["geometry-type"], "LineString"],
     paint: {
-      "line-color": "#0000ff",
+      "line-color": "darkslategrey",
       "line-width": 5
     }
   })
