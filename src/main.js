@@ -33,43 +33,9 @@ const locationInfo = {
 
 map.on( "load", async () => {
 
-	// map.addSource( "mydatasource", { type: "geojson", data: {
-	// 	type: "FeatureCollection",
-	// 	features: [],
-	// } } )
-	// map.addLayer( {
-	// 	id: "polygons",
-	// 	source: "mydatasource",
-	// 	type: "fill",
-	// 	filter: [ "==", [ "geometry-type" ], "Polygon" ],
-	// 	paint: {
-	// 		"fill-color": "#ffa500",
-	// 		"fill-opacity": 0.5,
-	// 	}
-	// } )
-	// map.addLayer( {
-	// 	id: "lines",
-	// 	source: "mydatasource",
-	// 	type: "line",
-	// 	filter: [ "==", [ "geometry-type" ], "LineString" ],
-	// 	paint: {
-	// 		"line-color": "#0000ff",
-	// 		"line-width": 5,
-	// 	},
-	// } )
-	// map.addLayer( {
-	// 	id: "polygon-outline",
-	// 	source: "mydatasource",
-	// 	type: "line",
-	// 	filter: [ "==", [ "geometry-type" ], "Polygon" ],
-	// 	paint: {
-	// 		"line-color": "#000000",
-	// 		"line-width": 3,
-	// 	},
-	// } )
-
 	map.addSource( "me", { type: "geojson", data: null } )
 	map.addSource( "me-hover", { type: "geojson", data: null } )
+	map.addSource( "me-active", { type: "geojson", data: null } )
 	map.addLayer( {
 		id: "me",
 		source: "me",
@@ -103,6 +69,18 @@ map.on( "load", async () => {
 			"circle-opacity": 0.75,
 		}
 	} )
+	map.addLayer( {
+		id: "me-active",
+		source: "me-active",
+		type: "circle",
+		paint: {
+			"circle-radius": 16,
+			"circle-color": "yellow",
+			"circle-stroke-color": "black",
+			"circle-stroke-width": 4,
+			"circle-opacity": 1,
+		}
+	} )
 
 	map.on( "mousemove", "me", e => {
 
@@ -120,6 +98,16 @@ map.on( "load", async () => {
 			type: "FeatureCollection",
 			features: [],
 		} )
+	} )
+
+	map.on( "click", "me-hover", e => {
+
+		if ( e.features.length ) {
+
+			const geoJSONFeature = e.features[ 0 ]
+
+			map.getSource( "me-active" ).setData( geoJSONFeature )
+		}
 	} )
 
 	//
