@@ -32,9 +32,12 @@ map.on( "load", async () => {
 		console.log( err )
 	}
 
-	const server = io( "http://localhost:3000" )
+	const server = io( "https://friends-socket-server.onrender.com" )
 
-	server.on( "new_user", user => addNewUser( user, map ) )
+	server.on( "new_user", user => {
+		console.log( user )
+		addNewUser( user, map )
+	} )
 
 	navigator.geolocation.getCurrentPosition( ( { coords } ) => {
 
