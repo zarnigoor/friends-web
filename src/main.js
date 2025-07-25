@@ -205,6 +205,43 @@ map.on( "load", async () => {
     map.setPaintProperty("lines", "line-width", 5)
   })
 
+  // Click effects for circle
+  map.on("click", "me", () => {
+    console.log("Circle clicked!")
+    map.setPaintProperty("me", "circle-color", "darkslategrey")
+    map.setPaintProperty("me", "circle-stroke-color", "ivory")
+    map.setPaintProperty("me", "circle-stroke-width", 8)
+    map.setPaintProperty("me", "circle-opacity", 1)
+    map.setPaintProperty("me", "circle-radius", [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      5, 22,
+      8, 20,
+      11, 18,
+      13, 16,
+      18, 14,
+    ])
+    
+    // Reset after animation
+    setTimeout(() => {
+      map.setPaintProperty("me", "circle-color", "darkslategrey")
+      map.setPaintProperty("me", "circle-stroke-color", "#ffffff")
+      map.setPaintProperty("me", "circle-stroke-width", 4)
+      map.setPaintProperty("me", "circle-opacity", 0.75)
+      map.setPaintProperty("me", "circle-radius", [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        5, 16,
+        8, 14,
+        11, 12,
+        13, 10,
+        18, 8,
+      ])
+    }, 200)
+  })
+
   button.onclick = () => {
 
     if (!state.tracking) {
