@@ -1,6 +1,7 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 import "./main.css"
 import mapboxgl from "mapbox-gl"
+import { io } from "socket.io-client"
 
 mapboxgl.accessToken = "pk.eyJ1IjoibmFqaW1vdiIsImEiOiJjbWRmazhzdG0wZHVzMmlzOGdrNHFreWV6In0.ENVcoFkxKIqNeCEax2JoFg"
 
@@ -45,6 +46,8 @@ const map = new mapboxgl.Map( {
 } )
 
 map.on( "load", async () => {
+
+	const server = io( "http://localhost:3000" )
 
 	map.on( "click", () => {
 
