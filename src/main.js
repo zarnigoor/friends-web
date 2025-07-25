@@ -11,10 +11,22 @@ const geojson = {
 			type: "Feature",
 			properties: {
 				username: "Toby",
+				avatar: "https://cdn5.vectorstock.com/i/1000x1000/95/04/funny-crocodile-surfing-cartoon-on-white-vector-47309504.jpg",
 			},
 			geometry: {
 				type: "Point",
 				coordinates: [ 69.26121583796288, 41.31552884597011 ]
+			}
+		},
+		{
+			type: "Feature",
+			properties: {
+				username: "Toby",
+				avatar: "https://dbw3zep4prcju.cloudfront.net/animal/6f03d683-43b3-4101-8a62-850ccfab79a3/image/e61d9814-a84c-43f8-a607-1aa962332f95.jpg?versionId=5gqLFUBzVa8uyoeri8DsodBYJqKH12kJ&bust=1752550902&width=600",
+			},
+			geometry: {
+				type: "Point",
+				coordinates: [ 69.26521583796288, 41.31552884597011 ]
 			}
 		},
 	]
@@ -38,7 +50,7 @@ map.on( "load", async () => {
 
 		const el = document.createElement( "div" )
 		el.className = "user"
-		el.style.backgroundImage = "url(https://i.etsystatic.com/51940401/r/il/09f87f/6026253544/il_570xN.6026253544_g00n.jpg)"
+		el.style.backgroundImage = `url(${ user.properties.avatar })`
 
 		el.onclick = () => {
 
