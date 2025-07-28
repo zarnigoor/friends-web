@@ -21,20 +21,20 @@ map.on( "load", async () => {
 
 	console.clear()
 
-	const username = prompt( "Type username:" )
-	let avatar = prompt( "Type image (avatar/profile) address:" )
-
+	// Get user data from localStorage (set by onboarding)
+	const userData = JSON.parse(localStorage.getItem('userData') || '{}')
+	const username = userData.name || 'Anonymous User'
+	let avatar = userData.image || "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png"
+	
 	try {
-
 		new URL( avatar )
 	}
 	catch( err ) {
-
 		avatar = "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png"
 		console.log( err )
 	}
 
-	const server = io( "https://friends-socket-server.onrender.com" )
+	const server = io( "http://localhost:3000" )
 
 	server.on( "new_user", user => {
 		console.log( user )

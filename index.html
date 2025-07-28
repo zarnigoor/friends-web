@@ -1,30 +1,238 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Friends</title>
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-			:root {
-				overflow: hidden;
-			}
-			#map {
-				position: absolute;
-				width: 100vw;
-				height: 100vh;
-				top: 0;
-				left: 0;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="map"></div>
-		<script type="module" src="/src/main.js"></script>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends - Welcome</title>
+    <link rel="stylesheet" href="styles/onboarding.css">
+    <style>
+        /* Main App Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            overflow: hidden;
+        }
+        
+        #map {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            display: none; /* Hidden initially */
+        }
+        
+        .user {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid #1DB954;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+        
+        .user:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Hide onboarding when app is active */
+        .app-active .screen {
+            display: none !important;
+        }
+        
+        .app-active #map {
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Onboarding Screens -->
+    <!-- Splash Screen -->
+    <div class="screen active" id="splash">
+        <div class="splash-screen">
+            <div class="logo">WELCOME</div>
+            <button class="start-btn" onclick="nextScreen()">Get Started</button>
+        </div>
+    </div>
+
+    <!-- Name Input Screen -->
+    <div class="screen" id="nameScreen">
+        <div class="form-container">
+            <div class="step-indicator">
+                <div class="step active"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+            </div>
+            <h2 class="form-title">What's your name?</h2>
+            <div class="input-group">
+                <label class="input-label">Full Name *</label>
+                <input type="text" class="input-field" id="nameInput" placeholder="Enter your full name" oninput="validateName()">
+                <div class="error-message" id="nameError"></div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="prevScreen()">Back</button>
+                <button class="btn btn-primary" id="nameNext" onclick="nextScreen()" disabled>Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Address Screen -->
+    <div class="screen" id="profileScreen">
+        <div class="form-container">
+            <div class="step-indicator">
+                <div class="step active"></div>
+                <div class="step active"></div>
+                <div class="step"></div>
+            </div>
+            <h2 class="form-title">Image Address</h2>
+            <div class="input-group">
+                <label class="input-label">Choose a Photo</label>
+                <div class="file-input-container">
+                    <input type="file" id="imageInput" class="file-input" accept="image/*" onchange="previewImage()">
+                    <label for="imageInput" class="file-input-label">📷 Choose a photo</label>
+                    <div class="file-preview" id="imagePreview"></div>
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Or Image Address</label>
+                <input type="url" class="input-field" id="imageUrlInput" placeholder="Enter image URL" oninput="previewImageUrl()">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="prevScreen()">Back</button>
+                <button class="btn btn-primary" onclick="nextScreen()">Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="screen" id="successScreen">
+        <div class="success-screen">
+            <div class="success-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="#1DB954" stroke="white" stroke-width="2"/>
+                    <path d="M8 12l2 2 4-4" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="success-title">You're All Set!</div>
+            <div class="success-subtitle">Welcome to the app, <span id="userName"></span>!</div>
+            <button class="start-btn" onclick="enterApp()">Enter App</button>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="map"></div>
+
+    <script>
+        // Onboarding JavaScript
+        let currentScreen = 0;
+        const screens = ['splash', 'nameScreen', 'profileScreen', 'successScreen'];
+        let userName = '';
+        let userImage = '';
+
+        function showScreen(index) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screens[index]).classList.add('active');
+        }
+
+        function nextScreen() {
+            if (currentScreen === 0) {
+                // From splash to name
+                currentScreen = 1;
+                showScreen(currentScreen);
+            } else if (currentScreen === 1) {
+                // From name to profile
+                if (validateName()) {
+                    currentScreen = 2;
+                    showScreen(currentScreen);
+                }
+            } else if (currentScreen === 2) {
+                // From profile to success
+                currentScreen = 3;
+                document.getElementById('userName').textContent = userName;
+                showScreen(currentScreen);
+            }
+        }
+
+        function prevScreen() {
+            if (currentScreen > 0) {
+                currentScreen--;
+                showScreen(currentScreen);
+            }
+        }
+
+        function validateName() {
+            const nameInput = document.getElementById('nameInput');
+            const nameError = document.getElementById('nameError');
+            const nameNext = document.getElementById('nameNext');
+            
+            userName = nameInput.value.trim();
+            
+            if (userName.length < 2) {
+                nameError.textContent = 'Name must be at least 2 characters long';
+                nameNext.disabled = true;
+                return false;
+            } else {
+                nameError.textContent = '';
+                nameNext.disabled = false;
+                return true;
+            }
+        }
+
+        function previewImage() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('imagePreview');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    userImage = e.target.result;
+                    preview.innerHTML = `<img src="${userImage}" alt="Preview" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #1DB954;">`;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function previewImageUrl() {
+            const input = document.getElementById('imageUrlInput');
+            const preview = document.getElementById('imagePreview');
+            
+            userImage = input.value;
+            if (userImage) {
+                preview.innerHTML = `<img src="${userImage}" alt="Preview" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #1DB954;">`;
+            }
+        }
+
+        function enterApp() {
+            // Save user data to localStorage for main.js to use
+            const userData = {
+                name: userName,
+                image: userImage || "https://www.kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png"
+            };
+            localStorage.setItem('userData', JSON.stringify(userData));
+            
+            // Hide all onboarding screens and show the map
+            document.body.classList.add('app-active');
+            
+            // Load the main.js script after onboarding is complete
+            loadMainApp();
+        }
+
+        function loadMainApp() {
+            // Create script tag for main.js
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = 'src/main.js';
+            document.head.appendChild(script);
+        }
+    </script>
+</body>
 </html>

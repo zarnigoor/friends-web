@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
   margin: 0;
   padding: 0;
@@ -13,12 +9,6 @@ body {
   height: 100vh;
   background: linear-gradient(135deg, #1db954 0%, #191414 100%);
   overflow: hidden;
-}
-
-.onboarding-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
 }
 
 .screen {
@@ -337,15 +327,6 @@ body::before {
   75% {
     transform: translateX(-10px) translateY(20px);
   }
-}
-
-/* Map styles */
-#map {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
 }
 
 /* Responsive */
